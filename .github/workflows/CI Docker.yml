@@ -1,4 +1,4 @@
-name: CI Docker - Build and Publish Image
+name: Docker CI - Build and Publish Image
 
 # Le workflow se déclenche sur chaque push dans main (modifiable)
 on:
