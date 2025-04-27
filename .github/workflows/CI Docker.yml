@@ -29,22 +29,22 @@ jobs:
           push: true
           tags: mydockerhubuser/my-image:latest         # À ADAPTER avec ton vrai username DockerHub
 
-      # ------------ GitHub Container Registry (GHCR) -------------
-      # 3a. Se connecter à GHCR (Github Container Registry)
-      - name: Login to GitHub Container Registry
-        uses: docker/login-action@v3
-        with:
-          registry: ghcr.io
-          username: ${{ github.actor }}                 # Nom d'utilisateur GitHub
-          password: ${{ secrets.GITHUB_TOKEN }}         # Token généré automatiquement par GitHub
+      # # ------------ GitHub Container Registry (GHCR) -------------
+      # # 3a. Se connecter à GHCR (Github Container Registry)
+      # - name: Login to GitHub Container Registry
+      #   uses: docker/login-action@v3
+      #   with:
+      #     registry: ghcr.io
+      #     username: ${{ github.actor }}                 # Nom d'utilisateur GitHub
+      #     password: ${{ secrets.GITHUB_TOKEN }}         # Token généré automatiquement par GitHub
 
-      # 3b. Build et Push vers GHCR (GitHub Container Registry)
-      - name: Build and push Docker image to GHCR
-        uses: docker/build-push-action@v5
-        with:
-          context: .
-          push: true
-          tags: ghcr.io/${{ github.repository }}/my-image:latest    # ghcr.io/owner/repo/my-image:latest
+      # # 3b. Build et Push vers GHCR (GitHub Container Registry)
+      # - name: Build and push Docker image to GHCR
+      #   uses: docker/build-push-action@v5
+      #   with:
+      #     context: .
+      #     push: true
+      #     tags: ghcr.io/${{ github.repository }}/my-image:latest    # ghcr.io/owner/repo/my-image:latest
 
 # ---------------------------
 # ASTUCES :
