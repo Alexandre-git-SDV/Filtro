@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Filtro - Appliquez votre filtre image !</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body id="accueil" class="body"> 
+    <!-- Navbar -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <span class="nav-title">Filtro</span>
+            <a href="#accueil" class="nav-link">Accueil</a>
+            <a href="#a-propos" class="nav-link">À propos</a>
+        </div>
+    </nav>
+
+    <!-- Contenu principal -->
+    <div class="container">
+        <h1>Upload d'une image</h1>
+        <form method="POST" enctype="multipart/form-data">
+            <input type="file" name="file" required>
+            <button type="submit">Uploader</button>
+        </form>
+        
+        {% if uploaded_file %}
+            <h2>Image chargée :</h2>
+            <img src="{{ url_for('static', filename='uploads/' + uploaded_file) }}" width="300"><br><br>
+            <form method="POST">
+                <input type="hidden" name="image_name" value="{{ uploaded_file }}">
+                <button name="action" value="jaune" type="submit">Filtre Jaune</button>
+                <button name="action" value="vert" type="submit">Filtre Vert</button>
+                <button name="action" value="rouge" type="submit">Filtre Rouge</button>
+                <button name="action" value="nb" type="submit">Noir & Blanc</button>
+            </form>
+        {% endif %}
+
+        {% if filtered_image %}
+            <h2>Image filtrée :</h2>
+            <img src="{{ url_for('static', filename='results/' + filtered_image) }}" width="300"><br>
+            <a href="{{ url_for('static', filename='results/' + filtered_image) }}" download="{{ filtered_image }}">
+                <button type="button">Télécharger l'image</button>
+            </a>
+        {% endif %}
+    </div>
+
+    <!-- Bas de page À propos -->
+    <footer id="a-propos" class="footer">
+        <h3>À propos</h3>
+        <p><strong>Auteurs :</strong> Alexandre GOURAUD, Alla-Eddine BOUKABOU</p>
+        <p>
+            <b>Filtro</b> est une application web permettant d’uploader une image et d’y appliquer des filtres quasi instantanément (jaune, vert, rouge ou noir et blanc).
+        </p>
+        <p>
+            Projet réalisé dans le cadre de notre Projet d'étude Python/Flask.<br>
+            © 2025 Filtro Team.
+        </p>
+    </footer>
+</body>
+</html>

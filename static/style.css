@@ -1,0 +1,87 @@
+body {
+    background: #3b71ca; /* bleu doux */
+    color: #fff;
+    font-family: 'Segoe UI', Arial, sans-serif;
+    margin: 0;
+}
+
+.navbar {
+    background: #254776;
+    padding: 15px 0;
+    position: sticky;
+    top: 0;
+    width: 100%;
+    z-index: 100;
+}
+
+.nav-container {
+    width: 90%;
+    margin: auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.nav-title {
+    font-size: 1.8em;
+    font-weight: bold;
+    color: #ffda47;
+    letter-spacing: 1px;
+}
+
+.nav-link {
+    color: #fff;
+    font-size: 1.1em;
+    text-decoration: none;
+    border-bottom: 2px solid transparent;
+    transition: border-color 0.2s;
+}
+.nav-link:hover { border-bottom: 2px solid #ffda47; }
+
+.container {
+    width: 90%;
+    max-width: 400px;
+    margin: 40px auto 20px auto;
+    padding: 24px 20px;
+    background: rgba(255,255,255,0.08);
+    border-radius: 15px;
+    box-shadow: 0 2px 12px rgba(10,45,90,0.11);
+    text-align: center;
+}
+
+input[type="file"] {
+    margin: 12px 0 18px 0;
+}
+
+button {
+    background: #ffda47;
+    color: #254776;
+    border: none;
+    padding: 9px 18px;
+    border-radius: 8px;
+    margin: 6px 2px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background 0.16s, color 0.16s;
+}
+button:hover {
+    background: #fcd024;
+    color: #173860;
+}
+
+.footer {
+    background: #14243e;
+    color: #fff;
+    padding: 32px 10px 22px 10px;
+    text-align: center;
+    margin-top: 70px;
+    border-top: 2px solid #ffda47;
+}
+.footer h3 {
+    margin-top: 0;
+    color: #ffda47;
+}
+.footer p { 
+    max-width: 540px; 
+    margin: 10px auto; 
+}
