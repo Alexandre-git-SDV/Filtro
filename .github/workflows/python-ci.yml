@@ -66,4 +66,4 @@ jobs:
 
       - name: Lancer les tests (pytest)
         run: |
-          PYTHONPATH=. pytest
+          PYTHONPATH=. app
