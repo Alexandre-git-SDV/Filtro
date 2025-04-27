@@ -1,0 +1,55 @@
+name: CI Docker - Build and Publish Image
+
+# Le workflow se déclenche sur chaque push dans main (modifiable)
+on:
+  push:
+    branches: [ main ]
+
+jobs:
+  build-and-publish:
+    runs-on: ubuntu-latest
+
+    steps:
+      # 1. Checkout du code (on récupère le repo)
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      # ------------ DockerHub -----------------------------------
+      # 2a. Se connecter à DockerHub (nécessite secrets configurés)
+      - name: Login to DockerHub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKER_USERNAME }}      # à définir dans Settings > Secrets (DockerHub username)
+          password: ${{ secrets.DOCKER_PASSWORD }}      # à définir dans Settings > Secrets (DockerHub password ou token)
+      # 2b. Build et Push vers DockerHub
+      - name: Build and push Docker image to DockerHub
+        uses: docker/build-push-action@v5
+        with:
+          context: .                # Construit à partir de la racine (où est le Dockerfile)
+          push: true
+          tags: mydockerhubuser/my-image:latest         # À ADAPTER avec ton vrai username DockerHub
+
+      # ------------ GitHub Container Registry (GHCR) -------------
+      # 3a. Se connecter à GHCR (Github Container Registry)
+      - name: Login to GitHub Container Registry
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}                 # Nom d'utilisateur GitHub
+          password: ${{ secrets.GITHUB_TOKEN }}         # Token généré automatiquement par GitHub
+
+      # 3b. Build et Push vers GHCR (GitHub Container Registry)
+      - name: Build and push Docker image to GHCR
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          push: true
+          tags: ghcr.io/${{ github.repository }}/my-image:latest    # ghcr.io/owner/repo/my-image:latest
+
+# ---------------------------
+# ASTUCES :
+# - Change "mydockerhubuser/my-image:latest" par ton vrai nom d'utilisateur et le nom de ton image sur DockerHub
+# - Pour n'utiliser que DockerHub ou GHCR, commente ou enlève la partie correspondante
+# - Mets ton Dockerfile à la racine du repo (ou adapte 'context')
+# - Ajoute tes secrets "DOCKER_USERNAME" et "DOCKER_PASSWORD" dans les Settings GitHub > Secrets
+# ---------------------------
