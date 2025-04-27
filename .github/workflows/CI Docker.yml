@@ -27,7 +27,7 @@ jobs:
         with:
           context: .                # Construit à partir de la racine (où est le Dockerfile)
           push: true
-          tags: mydockerhubuser/my-image:latest         # À ADAPTER avec ton vrai username DockerHub
+          tags: ${{ secrets.DOCKER_USERNAME }}/my-image:latest         # À ADAPTER avec ton vrai username DockerHub
 
       # # ------------ GitHub Container Registry (GHCR) -------------
       # # 3a. Se connecter à GHCR (Github Container Registry)
