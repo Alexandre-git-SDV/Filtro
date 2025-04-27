@@ -1,0 +1,4 @@
+requests
+# This file is used to install the required packages for the project.
+Flask
+Pillow
