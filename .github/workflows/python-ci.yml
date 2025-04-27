@@ -1,6 +1,4 @@
-# Ce workflow installe les dépendances Python, 
-vérifie la qualité du code avec Pylint, 
-valide l'installation des packages et exécute les tests unitaires sur chaque pull request ou push.
+# Ce workflow installe les dépendances Python, vérifie la qualité du code avec Pylint, valide l'installation des packages et exécute les tests unitaires sur chaque pull request ou push.
 name: Python CI
 
 on:
