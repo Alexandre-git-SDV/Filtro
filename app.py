@@ -42,8 +42,8 @@ def apply_filter(image_path, color_filter, niveau_blanc=180):  # Niveau de blanc
                 elif color_filter == "rouge":
                     img.putpixel((x, y), (b, r, v))
                 # ---- FILTRE NOIR ET BLANC (NOIR) ----
-                elif color_filter == "nb":
-                    img.putpixel((x, y), (0, 0, 0))
+                # elif color_filter == "nb":
+                #     img.putpixel((x, y), (0, 0, 0))
     
     result_filename = f"{color_filter}_{os.path.basename(image_path)}"
     result_path = os.path.join(RESULT_FOLDER, result_filename)
