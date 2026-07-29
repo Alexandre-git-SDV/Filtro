@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Filtro - Appliquez votre filtre image !</title>
+      <p> Site d'exemple </p>
+    <link rel="stylesheet" href="static/style.css">
+</head>
+<body id="accueil" class="body"> 
+    <!-- Navbar -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <span class="nav-title">Filtro</span>
+            <a href="#accueil" class="nav-link">Accueil</a>
+            <a href="#a-propos" class="nav-link">À propos</a>
+        </div>
+    </nav>
+
+    <!-- Contenu principal -->
+    <div class="container">
+        <h1>Upload d'une image</h1>
+        <form method="POST" enctype="multipart/form-data">
+            <input type="file" name="file" required>
+            <button type="submit">Uploader</button>
+        </form>
+
+        <!-- Aperçu de la démo (image d'exemple du repo) -->
+        <h2>Exemple de résultat :</h2>
+        <img src="static/uploads/ImageIA2.webp" width="300" alt="Image originale">
+        <img src="static/results/vert_ImageIA2.webp" width="300" alt="Filtre vert appliqué">
+    </div>
+
+    <!-- Bas de page À propos -->
+    <footer id="a-propos" class="footer">
+        <h3>À propos</h3>
+        <p><strong>Auteurs :</strong> Alexandre GOURAUD, Alla-Eddine BOUKABOU</p>
+        <p>
+            <b>Filtro</b> est une application web permettant d’uploader une image et d’y appliquer des filtres quasi instantanément (jaune, vert, rouge ou noir et blanc).
+        </p>
+        <p>
+            Projet réalisé dans le cadre de notre Projet d'étude.<br>
+            © 2025 Filtro Team.
+        </p>
+    </footer>
+</body>
+</html>
