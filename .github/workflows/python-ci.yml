@@ -53,8 +53,9 @@ jobs:
           pip install pylint
 
       - name: Run Pylint
-        # The Python code lives in Filtro_Python/
-        run: pylint Filtro_Python --ignore=venv,tests,migrations,static --exit-zero
+        # The Python code lives in Filtro_Python/, which is not a package:
+        # --recursive=y is required for pylint to walk the directory
+        run: pylint --recursive=y Filtro_Python --ignore=venv,tests,migrations,static --exit-zero
 
       - name: Check that the application imports
         working-directory: Filtro_Python
