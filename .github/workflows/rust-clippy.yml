@@ -45,7 +45,7 @@ jobs:
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v5
+        uses: actions/checkout@v7
 
       # actions-rs/toolchain has been unmaintained since 2022: replaced by dtolnay/rust-toolchain
       - name: Install Rust toolchain
