@@ -1,55 +1,96 @@
 name: Docker CI - Build and Publish Image
 
-# Le workflow se déclenche sur chaque push dans main (modifiable)
+# Verification build on every PR, build + push on main
 on:
   push:
     branches: [ main ]
+    paths:
+      - 'Dockerfile'
+      - 'requirements.txt'
+      - 'Filtro_Python/**'
+      - '.github/workflows/Docker CI.yml'
+  pull_request:
+    branches: [ main ]
+    paths:
+      - 'Dockerfile'
+      - 'requirements.txt'
+      - 'Filtro_Python/**'
+      - '.github/workflows/Docker CI.yml'
+  workflow_dispatch:
+
+env:
+  # Run JavaScript actions on Node 24 instead of the default Node 20
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+
+concurrency:
+  group: docker-${{ github.ref }}
+  cancel-in-progress: true
 
 jobs:
   build-and-publish:
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+
+    # The `secrets` context cannot be read from a step-level `if`:
+    # copy it into the job env so its presence can be tested
+    env:
+      HAS_DOCKERHUB: ${{ secrets.DOCKER_USERNAME != '' }}
 
     steps:
-      # 1. Checkout du code (on récupère le repo)
+      # 1. Check out the repository
       - name: Checkout repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
 
       # ------------ DockerHub -----------------------------------
-      # 2a. Se connecter à DockerHub (nécessite secrets configurés)
+      # 2a. Log in to DockerHub (only on main, and only if the secrets exist)
       - name: Login to DockerHub
+        id: login
+        if: github.event_name != 'pull_request' && env.HAS_DOCKERHUB == 'true'
         uses: docker/login-action@v3
         with:
-          username: ${{ secrets.DOCKER_USERNAME }}      # à définir dans Settings > Secrets (DockerHub username)
-          password: ${{ secrets.DOCKER_PASSWORD }}      # à définir dans Settings > Secrets (DockerHub password ou token)
-      # 2b. Build et Push vers DockerHub
+          username: ${{ secrets.DOCKER_USERNAME }}      # set it in Settings > Secrets
+          password: ${{ secrets.DOCKER_PASSWORD }}      # set it in Settings > Secrets (token recommended)
+
+      # 2b. Always build, push only when the login step actually ran
       - name: Build and push Docker image to DockerHub
-        uses: docker/build-push-action@v5
+        uses: docker/build-push-action@v6
         with:
-          context: .                # Construit à partir de la racine (où est le Dockerfile)
-          push: true
-          tags: ${{ secrets.DOCKER_USERNAME }}/filtro:latest         # À ADAPTER avec ton vrai username DockerHub
+          context: .                 # Build from the repository root (where the Dockerfile is)
+          file: ./Dockerfile
+          push: ${{ steps.login.outcome == 'success' }}
+          tags: |
+            ${{ secrets.DOCKER_USERNAME }}/filtro:latest
+            ${{ secrets.DOCKER_USERNAME }}/filtro:${{ github.sha }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
 
       # # ------------ GitHub Container Registry (GHCR) -------------
-      # # 3a. Se connecter à GHCR (Github Container Registry)
+      # # 3a. Log in to GHCR (GitHub Container Registry)
       # - name: Login to GitHub Container Registry
       #   uses: docker/login-action@v3
       #   with:
       #     registry: ghcr.io
-      #     username: ${{ github.actor }}                 # Nom d'utilisateur GitHub
-      #     password: ${{ secrets.GITHUB_TOKEN }}         # Token généré automatiquement par GitHub
-
-      # # 3b. Build et Push vers GHCR (GitHub Container Registry)
+      #     username: ${{ github.actor }}                 # GitHub username
+      #     password: ${{ secrets.GITHUB_TOKEN }}         # token generated automatically by GitHub
+      #   # also requires: permissions -> packages: write
+      #
+      # # 3b. Build and push to GHCR (GitHub Container Registry)
       # - name: Build and push Docker image to GHCR
-      #   uses: docker/build-push-action@v5
+      #   uses: docker/build-push-action@v6
       #   with:
       #     context: .
+      #     file: ./Dockerfile
       #     push: true
-      #     tags: ghcr.io/${{ github.repository }}/my-image:latest    # ghcr.io/owner/repo/my-image:latest
+      #     tags: ghcr.io/${{ github.repository }}:latest
 
 # ---------------------------
-# ASTUCES :
-# - Change "mydockerhubuser/my-image:latest" par ton vrai nom d'utilisateur et le nom de ton image sur DockerHub
-# - Pour n'utiliser que DockerHub ou GHCR, commente ou enlève la partie correspondante
-# - Mets ton Dockerfile à la racine du repo (ou adapte 'context')
-# - Ajoute tes secrets "DOCKER_USERNAME" et "DOCKER_PASSWORD" dans les Settings GitHub > Secrets
+# NOTES:
+# - Add the "DOCKER_USERNAME" and "DOCKER_PASSWORD" secrets in
+#   Settings > Secrets and variables > Actions
+# - Without those secrets the workflow only checks that the image builds (no push)
+# - The Dockerfile must stay at the repository root (otherwise adapt 'context' and 'file')
 # ---------------------------

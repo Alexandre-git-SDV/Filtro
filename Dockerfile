@@ -13,5 +13,9 @@ RUN pip install --no-cache-dir -r requirements.txt
 # Expose le port de Flask (par défaut 5000)
 EXPOSE 5000
 
+# L'application Flask vit dans Filtro_Python/ et utilise des chemins relatifs
+# (static/uploads, static/results) : on se place donc dans ce dossier
+WORKDIR /app/Filtro_Python
+
 # Commande pour lancer l’application Flask
 CMD ["python", "app.py"]

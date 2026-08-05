@@ -1,22 +1,61 @@
-name: Rust
+name: Rust CI
 
 on:
   push:
     branches: [ "main" ]
+    paths:
+      - 'Filtro_Rust/**'
+      - '.github/workflows/rust.yml'
   pull_request:
     branches: [ "main" ]
+    paths:
+      - 'Filtro_Rust/**'
+      - '.github/workflows/rust.yml'
+  workflow_dispatch:
 
 env:
   CARGO_TERM_COLOR: always
+  # Run JavaScript actions on Node 24 instead of the default Node 20
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+
+# Only one run per branch / PR
+concurrency:
+  group: rust-${{ github.ref }}
+  cancel-in-progress: true
 
 jobs:
   build:
-
+    name: Build & tests
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+
+    # The crate does not live at the repository root: every `run` step is
+    # executed from Filtro_Rust/ (where Cargo.toml is)
+    defaults:
+      run:
+        working-directory: Filtro_Rust
 
     steps:
-    - uses: actions/checkout@v4
-    - name: Build
-      run: cargo build --verbose
-    - name: Run tests
-      run: cargo test --verbose
+      - name: Checkout code
+        uses: actions/checkout@v5
+
+      - name: Install Rust toolchain
+        uses: dtolnay/rust-toolchain@stable
+        with:
+          components: rustfmt
+
+      - name: Cache cargo registry & target
+        uses: Swatinem/rust-cache@v2
+        with:
+          workspaces: Filtro_Rust
+
+      - name: Check formatting (non blocking)
+        run: cargo fmt --all --check
+        continue-on-error: true
+
+      - name: Build
+        run: cargo build --verbose --all-targets
+
+      - name: Run tests
+        run: cargo test --verbose
