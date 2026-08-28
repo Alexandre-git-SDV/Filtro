@@ -1,7 +1,34 @@
 [package]
-name = "Filtro_Rust"
+name = "filtro"
 version = "0.1.0"
 edition = "2024"
+rust-version = "1.88"
+
+[[bin]]
+name = "filtro"
+path = "src/main.rs"
+
+[lib]
+name = "filtro"
+path = "src/lib.rs"
 
 [dependencies]
-image = "0.25.9"
+image = { version = "0.25", default-features = false, features = [
+    "png",
+    "jpeg",
+    "bmp",
+    "tiff",
+    "webp",
+    "gif",
+] }
+thiserror = "2"
+clap = { version = "4.6", features = ["derive"] }
+
+[dev-dependencies]
+image = { version = "0.25", default-features = false, features = ["png"] }
+
+[profile.release]
+opt-level = 3
+lto = "thin"
+codegen-units = 1
+strip = true

@@ -13,33 +13,13 @@ updates:
       timezone: "Europe/Paris"
     open-pull-requests-limit: 5
     commit-message:
-      prefix: "cargo"
+      prefix: "[BOT] Cargo :"
     labels:
       - "dependencies"
       - "rust"
     groups:
       # Group minor and patch bumps into a single PR
       cargo-minor-patch:
-        update-types:
-          - "minor"
-          - "patch"
-
-  # --- Python dependencies (requirements.txt at the repository root) ---
-  - package-ecosystem: "pip"
-    directory: "/"
-    schedule:
-      interval: "weekly"
-      day: "monday"
-      time: "06:00"
-      timezone: "Europe/Paris"
-    open-pull-requests-limit: 5
-    commit-message:
-      prefix: "pip"
-    labels:
-      - "dependencies"
-      - "python"
-    groups:
-      pip-minor-patch:
         update-types:
           - "minor"
           - "patch"
@@ -54,7 +34,7 @@ updates:
       timezone: "Europe/Paris"
     open-pull-requests-limit: 5
     commit-message:
-      prefix: "ci"
+      prefix: "[BOT] CI :"
     labels:
       - "dependencies"
       - "github-actions"
@@ -73,7 +53,7 @@ updates:
       timezone: "Europe/Paris"
     open-pull-requests-limit: 3
     commit-message:
-      prefix: "docker"
+      prefix: "[BOT] Docker :"
     labels:
       - "dependencies"
       - "docker"

@@ -1,14 +1,12 @@
-# CodeQL security analysis for both implementations of the project:
-#   - Python: Filtro_Python/
-#   - Rust:   Filtro_Rust/
+# CodeQL security analysis for the Rust crate (Filtro_Rust/).
 # Results show up under Security > Code scanning.
 name: CodeQL
 
 on:
   push:
-    branches: [ "main" ]
+    branches: [ "main", "development" ]
   pull_request:
-    branches: [ "main" ]
+    branches: [ "main", "development" ]
   schedule:
     - cron: '0 5 * * 0'
   workflow_dispatch:
@@ -35,9 +33,7 @@ jobs:
       fail-fast: false
       matrix:
         include:
-          # Neither language requires a build step for CodeQL extraction
-          - language: python
-            build-mode: none
+          # Rust does not require a build step for CodeQL extraction
           - language: rust
             build-mode: none
 
