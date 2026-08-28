@@ -1,41 +1,4 @@
 # ---------------------------------------------------------------
-# Python (Filtro_Python)
-# ---------------------------------------------------------------
-__pycache__/
-*.py[cod]
-*$py.class
-*.so
-
-# Virtual environments
-.venv/
-venv/
-ENV/
-env/
-
-# Packaging / build
-build/
-dist/
-*.egg-info/
-.eggs/
-
-# Tests & tooling caches
-.pytest_cache/
-.mypy_cache/
-.ruff_cache/
-.coverage
-.coverage.*
-htmlcov/
-.tox/
-
-# Flask
-instance/
-*.log
-
-# Files generated at runtime by the app
-Filtro_Python/static/uploads/
-Filtro_Python/static/results/
-
-# ---------------------------------------------------------------
 # Rust (Filtro_Rust)
 # ---------------------------------------------------------------
 target/

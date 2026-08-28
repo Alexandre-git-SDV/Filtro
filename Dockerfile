@@ -1,21 +1,26 @@
-# Utilise une image python officielle comme parent
-FROM python:3.14-slim
+# syntax=docker/dockerfile:1
 
-# Définit le répertoire de travail dans le conteneur
-WORKDIR /app
+# ---- Build stage : compile the `filtro` binary ------------------------------
+FROM rust:1-slim AS build
 
-# Copie les fichiers nécessaires
-COPY . /app
+WORKDIR /src
+# Only the Rust crate is needed to build
+COPY Filtro_Rust/ ./Filtro_Rust/
 
-# Installation des dépendances Python
-RUN pip install --no-cache-dir -r requirements.txt
+WORKDIR /src/Filtro_Rust
+RUN cargo build --release --locked
 
-# Expose le port de Flask (par défaut 5000)
-EXPOSE 5000
+# ---- Runtime stage : minimal image with just the binary --------------------
+FROM debian:stable-slim
 
-# L'application Flask vit dans Filtro_Python/ et utilise des chemins relatifs
-# (static/uploads, static/results) : on se place donc dans ce dossier
-WORKDIR /app/Filtro_Python
+# Run as a non-root user
+RUN useradd --create-home --uid 10001 filtro
+USER filtro
+WORKDIR /work
 
-# Commande pour lancer l’application Flask
-CMD ["python", "app.py"]
+COPY --from=build /src/Filtro_Rust/target/release/filtro /usr/local/bin/filtro
+
+# The container *is* the CLI tool:
+#   docker run --rm -v "$PWD:/work" filtro photo.jpg -f jaune -o out
+ENTRYPOINT ["filtro"]
+CMD ["--help"]
