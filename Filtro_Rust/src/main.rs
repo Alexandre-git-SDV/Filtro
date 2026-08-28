@@ -1,24 +1,9 @@
-use std::io::Cursor;
-use image::ImageReader;
+//! Binaire `filtro` — assemble les couches **Controller** et **View** autour de
+//! la bibliothèque [`filtro`] (la couche **Model**).
 
-fn main() -> Result<(), Box<dyn std::error::Error>> {
-    // Charger une image depuis un fichier
-    let img = ImageReader::open("/workspaces/Filtro/Filtro_Rust/src/Image.webp")?.decode()?;
+mod controller;
+mod view;
 
-    // Sauvegarde directe
-    img.save("empty.jpg")?;
-
-    // Écrire l'image dans un buffer mémoire
-    let mut bytes: Vec<u8> = Vec::new();
-    img.write_to(&mut Cursor::new(&mut bytes), image::ImageFormat::Png)?;
-
-    // Relire l'image depuis le buffer
-    let img2 = ImageReader::new(Cursor::new(bytes))
-        .with_guessed_format()?
-        .decode()?;
-
-    // Sauvegarde pour vérifier
-    img2.save("from_bytes.png")?;
-
-    Ok(())
+fn main() -> std::process::ExitCode {
+    controller::run()
 }
