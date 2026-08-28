@@ -75,7 +75,7 @@
         const sourceCanvas = document.getElementById('source-canvas');
         const workCanvas = document.getElementById('work-canvas');
 
-        // --- Reproduit exactement la logique de apply_filter() côté Python ---
+        // --- Même logique de filtrage que l'outil CLI (seuil de blanc + permutation des canaux) ---
         function applyFilter(imageData, colorFilter) {
             const data = imageData.data; // [r,g,b,a, r,g,b,a, ...]
             for (let i = 0; i < data.length; i += 4) {
