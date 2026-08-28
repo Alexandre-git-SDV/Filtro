@@ -6,15 +6,13 @@ on:
     branches: [ main ]
     paths:
       - 'Dockerfile'
-      - 'requirements.txt'
-      - 'Filtro_Python/**'
+      - 'Filtro_Rust/**'
       - '.github/workflows/Docker CI.yml'
   pull_request:
     branches: [ main ]
     paths:
       - 'Dockerfile'
-      - 'requirements.txt'
-      - 'Filtro_Python/**'
+      - 'Filtro_Rust/**'
       - '.github/workflows/Docker CI.yml'
   workflow_dispatch:
 
